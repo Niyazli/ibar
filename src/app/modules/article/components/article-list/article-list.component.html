@@ -1,0 +1,78 @@
+<div class="row">
+  <div class="col-12 d-flex align-items-center justify-content-between">
+    <button
+      mat-button
+      color="primary"
+      *ngIf="selectedUserId"
+      (click)="handleCreateArticle()"
+    >
+      Add new post <mat-icon>add</mat-icon>
+    </button>
+    <mat-paginator
+      [pageIndex]="pagination?.currentPage - 1"
+      pageSize="20"
+      (page)="handlePage($event)"
+      [length]="pagination?.totalCount"
+    ></mat-paginator>
+    <mat-checkbox color="primary" [(ngModel)]="multiply">
+      Multiply view
+    </mat-checkbox>
+  </div>
+  <div class="col-12">
+    <mat-accordion [multi]="multiply">
+      <mat-expansion-panel
+        *ngFor="let article of articles; let i = index"
+        [expanded]="i === 0"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ article.user_id }}</mat-panel-title>
+          <mat-panel-description>{{ article.title }}</mat-panel-description>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+          <mat-form-field>
+            <input
+              placeholder="Enter article title..."
+              type="text"
+              matInput
+              [(ngModel)]="article.title"
+            />
+          </mat-form-field>
+          <mat-form-field>
+            <textarea
+              placeholder="Enter article..."
+              type="text"
+              matInput
+              [(ngModel)]="article.body"
+              rows="7"
+            ></textarea>
+          </mat-form-field>
+        </ng-template>
+        <mat-action-row align="end">
+          <button
+            *ngIf="!article.id"
+            (click)="handleSaveArticle(article)"
+            mat-button
+            color="primary"
+          >
+            SAVE
+          </button>
+          <button
+            *ngIf="article.id"
+            (click)="handleUpdateArticle(article)"
+            mat-button
+            color="accent"
+          >
+            UPDATE
+          </button>
+          <button
+            mat-button
+            color="warn"
+            (click)="handleDeleteArticle(article.id, i)"
+          >
+            DELETE
+          </button>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

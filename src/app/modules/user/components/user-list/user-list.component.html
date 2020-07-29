@@ -1,0 +1,36 @@
+<mat-progress-bar
+  mode="indeterminate"
+  color="primary"
+  *ngIf="loadingState"
+></mat-progress-bar>
+<mat-selection-list
+  [multiple]="false"
+  [(ngModel)]="selectedUserId"
+  (selectionChange)="userService.getUserById(selectedUserId)"
+>
+  <mat-list-item>
+    <mat-form-field>
+      <mat-label>search by name...</mat-label>
+      <input
+        type="text"
+        matInput
+        [(ngModel)]="userFilterDto.first_name"
+        (change)="getData()"
+      />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </mat-list-item>
+  <div class="user-wrapper">
+    <mat-list-option *ngFor="let user of users" [value]="user.id">
+      {{ user.first_name }}
+    </mat-list-option>
+  </div>
+  <mat-list-item>
+    <mat-paginator
+      [pageIndex]="pagination?.currentPage - 1"
+      pageSize="20"
+      (page)="handlePage($event)"
+      [length]="pagination?.totalCount"
+    ></mat-paginator>
+  </mat-list-item>
+</mat-selection-list>
